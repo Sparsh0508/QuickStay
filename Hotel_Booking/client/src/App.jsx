@@ -13,6 +13,7 @@ import AddRooms from './pages/HotelOwner/AddRooms'
 import ListRoom from './pages/HotelOwner/ListRoom'
 import {Toaster} from 'react-hot-toast'
 import { useAppContext } from './context/AppContext'
+import Login from './pages/Login'
 
 const App = () =>{
   const isOwnerPath = useLocation().pathname.includes("/owner"); 
@@ -27,6 +28,8 @@ const App = () =>{
       <div className='min-h-[70vh]'>
         <Routes>
           <Route path='/' element={<Home/>}></Route>
+          <Route path='/login' element={<Login/>}></Route>
+
           <Route path='/rooms' element={<AllRooms/>}></Route>
           <Route path='/rooms/:id' element={<RoomDetails/>}></Route>
           <Route path='/my-bookings' element={<MyBookings/>}></Route>

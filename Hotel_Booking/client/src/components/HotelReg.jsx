@@ -15,14 +15,13 @@ const HotelReg = () => {
     try {
       event.preventDefault();
       const token = await getToken();
-    console.log("🔑 Clerk Token:", token);
       const response = await axios.post(
         "/api/hotels",
         { name, contact, address, city },
         { headers: { Authorization: `Bearer ${await getToken()}` } }
       );
       console.log(response);
-      
+
 
       if (response.data.success) {
         toast.success(response.data.message);

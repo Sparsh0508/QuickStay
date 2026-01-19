@@ -1,7 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { assets } from "../assets/assets";
 import { Link, useLocation } from "react-router-dom";
-import { useClerk, UserButton } from "@clerk/clerk-react";
 import { useAppContext } from "../context/AppContext";
 
 const BookIcon = () => {
@@ -32,15 +31,14 @@ const Navbar = () => {
     { name: "About", path: "/" },
   ];
 
-  const ref = useRef(null);
   // const navigate = useNavigate();
   const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { openSignIn } = useClerk();
+  const openSignIn = () => toast.error("Login disabled - custom auth needed");
   // const { user } = useUser();
 
-  const {user,navigate,isOwner,setShowHotelReg} = useAppContext();
+  const { user, navigate, isOwner, setShowHotelReg } = useAppContext();
 
   // useEffect(() => {
   //     if(location.pathname !== '/'){
@@ -75,11 +73,10 @@ const Navbar = () => {
     <nav
       className={`fixed top-0 left-0 w-full flex items-center justify-between 
                 px-4 md:px-16 lg:px-24 xl:px-32 z-50 transition-all duration-500 
-                ${
-                  isScrolled
-                    ? "bg-white/80 shadow-md text-gray-700 backdrop-blur-md py-3 md:py-4"
-                    : "bg-transparent text-white py-4 md:py-6"
-                }`}
+                ${isScrolled
+          ? "bg-white/80 shadow-md text-gray-700 backdrop-blur-md py-3 md:py-4"
+          : "bg-transparent text-white py-4 md:py-6"
+        }`}
     >
       {/* Logo */}
       <Link to="/">
@@ -96,28 +93,25 @@ const Navbar = () => {
           <Link
             key={i}
             to={link.path}
-            className={`group flex flex-col gap-0.5 ${
-              isScrolled ? "text-gray-700" : "text-white"
-            }`}
+            className={`group flex flex-col gap-0.5 ${isScrolled ? "text-gray-700" : "text-white"
+              }`}
           >
             {link.name}
             <div
-              className={`${
-                isScrolled ? "bg-gray-700" : "bg-white"
-              } h-0.5 w-0 group-hover:w-full transition-all duration-300`}
+              className={`${isScrolled ? "bg-gray-700" : "bg-white"
+                } h-0.5 w-0 group-hover:w-full transition-all duration-300`}
             />
           </Link>
         ))}
-       { user && ( 
-        <button
-          className={`border px-4 py-1 text-sm font-light rounded-full cursor-pointer ${
-            isScrolled ? "text-black" : "text-white"
-          } transition-all`}
-          onClick={() => isOwner ? navigate("/owner") : setShowHotelReg(true) }
-        >
-          {isOwner ? 'DashBoard' : "List Your Hotel"}
-        </button>
-       )
+        {user && (
+          <button
+            className={`border px-4 py-1 text-sm font-light rounded-full cursor-pointer ${isScrolled ? "text-black" : "text-white"
+              } transition-all`}
+            onClick={() => isOwner ? navigate("/owner") : setShowHotelReg(true)}
+          >
+            {isOwner ? 'DashBoard' : "List Your Hotel"}
+          </button>
+        )
         }
       </div>
 
@@ -130,17 +124,9 @@ const Navbar = () => {
         ></img>
 
         {user ? (
-          <UserButton>
-            <UserButton.MenuItems>
-              <UserButton.Action
-                label="My Booking"
-                labelIcon={<BookIcon />}
-                onClick={() => {
-                  navigate("/my-bookings");
-                }}
-              ></UserButton.Action>
-            </UserButton.MenuItems>
-          </UserButton>
+          <div className="flex items-center gap-2">
+            <img src={assets.userIcon} alt="user" className="w-8 h-8 rounded-full border border-gray-300" />
+          </div>
         ) : (
           <button
             onClick={openSignIn}
@@ -154,17 +140,7 @@ const Navbar = () => {
       {/* Mobile Menu Button */}
       <div className="flex items-center gap-3 md:hidden">
         {user && (
-          <UserButton>
-            <UserButton.MenuItems>
-              <UserButton.Action
-                label="My Booking"
-                labelIcon={<BookIcon />}
-                onClick={() => {
-                  navigate("/my-bookings");
-                }}
-              ></UserButton.Action>
-            </UserButton.MenuItems>
-          </UserButton>
+          <img src={assets.userIcon} alt="user" className="w-8 h-8 rounded-full border border-gray-300" />
         )}
 
         <img
@@ -177,9 +153,8 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       <div
-        className={`fixed top-0 left-0 w-full h-screen bg-white text-base flex flex-col md:hidden items-center justify-center gap-6 font-medium text-gray-800 transition-all duration-500 ${
-          isMenuOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`fixed top-0 left-0 w-full h-screen bg-white text-base flex flex-col md:hidden items-center justify-center gap-6 font-medium text-gray-800 transition-all duration-500 ${isMenuOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
       >
         <button
           className="absolute top-4 right-4"
@@ -197,10 +172,10 @@ const Navbar = () => {
         {user && (
           <button
             className="border px-4 py-1 text-sm font-light rounded-full cursor-pointer transition-all"
-            onClick={() => isOwner ? navigate("/owner") : setShowHotelReg(true) }
+            onClick={() => isOwner ? navigate("/owner") : setShowHotelReg(true)}
 
           >
-          {isOwner ? 'DashBoard' : "List Your Hotel"}
+            {isOwner ? 'DashBoard' : "List Your Hotel"}
 
           </button>
         )}
