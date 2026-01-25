@@ -10,38 +10,58 @@ export const AppProvider = ({ children }) => {
 
     const currency = import.meta.env.VITE_CURRENCY || "$";
     const navigate = useNavigate()
-    const user = null; // Removed Clerk useUser
-    const getToken = () => ""; // Removed Clerk useAuth
+    const [user, setUser] = useState(null);
+    const [token, setToken] = useState(localStorage.getItem('token') || "");
+
+    const getToken = () => token;
 
     const [searchedCities, setSearchedCities] = useState([])
 
     const [isOwner, setIsOwner] = useState(false);
     const [showHotelReg, setShowHotelReg] = useState(false);
 
+    const login = (userData, userToken) => {
+        setUser(userData);
+        setToken(userToken);
+        localStorage.setItem('token', userToken);
+        localStorage.setItem('user', JSON.stringify(userData));
+    };
+
+    const logout = () => {
+        setUser(null);
+        setToken("");
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        navigate('/login');
+    };
+
     const fetchUser = useCallback(async () => {
+        if (!token) return;
         try {
-            const { data } = await axios.get('/api/user', { headers: { Authorization: `Bearer ${await getToken()}` } })
+            const { data } = await axios.get('/api/user', { headers: { Authorization: `Bearer ${token}` } })
             if (data.success) {
                 setIsOwner(data.role === "hotelOwner");
-                setSearchedCities(data.recentSearchedCities)
+                setSearchedCities(data.recentSearchCity || [])
+                setUser(JSON.parse(localStorage.getItem('user')));
             } else {
-                setTimeout(() => {
-                    fetchUser()
-                }, 5000)
+                logout();
             }
         } catch (error) {
-            toast.error(error.message)
+            console.error(error);
+            logout();
         }
-    }, [getToken])
+    }, [token, navigate])
 
     useEffect(() => {
-        if (user) {
+        const storedUser = localStorage.getItem('user');
+        if (storedUser && token) {
+            setUser(JSON.parse(storedUser));
             fetchUser();
         }
-    }, [user, fetchUser])
+    }, [token, fetchUser])
 
     const value = {
-        currency, navigate, user, getToken, isOwner, setIsOwner, axios, showHotelReg, setShowHotelReg, setSearchedCities, searchedCities
+        currency, navigate, user, setUser, token, setToken, login, logout, getToken, isOwner, setIsOwner, axios, showHotelReg, setShowHotelReg, setSearchedCities, searchedCities
     }
 
     return (
