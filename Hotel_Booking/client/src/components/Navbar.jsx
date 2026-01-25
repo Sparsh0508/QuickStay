@@ -35,25 +35,7 @@ const Navbar = () => {
   const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const openSignIn = () => toast.error("Login disabled - custom auth needed");
-  // const { user } = useUser();
-
-  const { user, navigate, isOwner, setShowHotelReg } = useAppContext();
-
-  // useEffect(() => {
-  //     if(location.pathname !== '/'){
-  //         setIsScrolled(true)
-  //     }else{
-  //         setIsScrolled(false)
-  //     }
-  //     setIsScrolled(prev => location.pathname !== '/' ? true : prev)
-
-  //     const handleScroll = () => {
-  //         setIsScrolled(ref.current.scrollTop > 10);
-  //     };
-  //     window.addEventListener("scroll", handleScroll);
-  //     return () => window.removeEventListener("scroll", handleScroll);
-  // }, []);
+  const { user, navigate, isOwner, setShowHotelReg, logout } = useAppContext();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -124,16 +106,24 @@ const Navbar = () => {
         ></img>
 
         {user ? (
-          <div className="flex items-center gap-2">
-            <img src={assets.userIcon} alt="user" className="w-8 h-8 rounded-full border border-gray-300" />
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 group relative cursor-pointer">
+              <img src={assets.userIcon} alt="user" className="w-8 h-8 rounded-full border border-gray-300" />
+              <div className="absolute right-0 top-full pt-2 hidden group-hover:block">
+                <div className="bg-white text-gray-800 shadow-lg rounded-lg py-2 w-32 border border-gray-100">
+                  <Link to="/my-bookings" className="block px-4 py-2 hover:bg-gray-50 transition">My Bookings</Link>
+                  <button onClick={logout} className="w-full text-left px-4 py-2 hover:bg-red-50 text-red-600 transition">Logout</button>
+                </div>
+              </div>
+            </div>
           </div>
         ) : (
-          <button
-            onClick={openSignIn}
+          <Link
+            to="/login"
             className="bg-black text-white px-8 py-2.5 rounded-full ml-4 transition-all duration-500"
           >
             Login
-          </button>
+          </Link>
         )}
       </div>
 
@@ -181,11 +171,24 @@ const Navbar = () => {
         )}
 
         {!user && (
-          <button
-            onClick={openSignIn}
+          <Link
+            to="/login"
+            onClick={() => setIsMenuOpen(false)}
             className="bg-black text-white px-8 py-2.5 rounded-full transition-all duration-500"
           >
             Login
+          </Link>
+        )}
+
+        {user && (
+          <button
+            onClick={() => {
+              logout();
+              setIsMenuOpen(false);
+            }}
+            className="bg-red-600 text-white px-8 py-2.5 rounded-full transition-all duration-500"
+          >
+            Logout
           </button>
         )}
       </div>
