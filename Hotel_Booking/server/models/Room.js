@@ -3,33 +3,33 @@ import Hotel from "./Hotel.js";
 
 const roomSchema = new mongoose.Schema({
     hotel: {
-        type:String,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "Hotel",
-        required:true
+        required: true
     },
     roomType: {
-        type:String,
-        required:true
+        type: String,
+        required: true
     },
     pricePerNight: {
-        type:Number,
-        required:true
+        type: Number,
+        required: true
     },
     amenities: {
-        type:Array,
-        required:true
+        type: Array,
+        required: true
     },
-    images: [{type:String}],
+    images: [{ type: String }],
 
     isAvailable: {
-        type:Boolean,
-        default:true
+        type: Boolean,
+        default: true
     },
 },
-{
-    timestamps:true
-})
+    {
+        timestamps: true
+    })
 
-const Room = mongoose.model("Room",roomSchema);
+const Room = mongoose.model("Room", roomSchema);
 
 export default Room;

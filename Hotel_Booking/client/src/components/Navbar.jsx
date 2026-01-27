@@ -36,6 +36,7 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { user, navigate, isOwner, setShowHotelReg, logout } = useAppContext();
+ 
 
   useEffect(() => {
     const handleScroll = () => {
