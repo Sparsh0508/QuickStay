@@ -11,6 +11,7 @@ const Signup = () => {
     username: "",
     email: "",
     password: "",
+    role: "user",
   });
 
   const navigate = useNavigate();
@@ -25,8 +26,8 @@ const Signup = () => {
 
   const handleSignup = async (e) => {
     e.preventDefault();
-    const { name, username, email, password } = signupInfo;
-    if (!name || !username || !email || !password) {
+    const { name, username, email, password, role } = signupInfo;
+    if (!name || !username || !email || !password || !role) {
       return handleError("Please fill all the fields");
     }
     try {
@@ -36,7 +37,7 @@ const Signup = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ name, username, email, password }),
+        body: JSON.stringify({ name, username, email, password, role }),
       });
       const data = await response.json();
       if (data.success) {
@@ -126,6 +127,21 @@ const Signup = () => {
               placeholder="Enter password"
               className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none"
             />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Join as
+            </label>
+            <select
+              name="role"
+              value={signupInfo.role}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none"
+            >
+              <option value="user">User</option>
+              <option value="hotelOwner">Hotel Owner</option>
+            </select>
           </div>
 
           <button

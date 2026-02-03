@@ -57,15 +57,15 @@ const createToken = (_id) => {
 
 export const signupUser = async (req, res) => {
     try {
-        const { name, username, email, password } = req.body;
+        const { name, username, email, password, role } = req.body;
 
         // Create new user using the static signup method in User model
-        const user = await User.signup(name, username, email, password);
+        const user = await User.signup(name, username, email, password, role);
 
         // Creating jwt token
         const token = createToken(user._id);
 
-        res.status(201).json({ success: true, message: 'User registered successfully', name: user.name, email: user.email, token });
+        res.status(201).json({ success: true, message: 'User registered successfully', name: user.name, email: user.email, role: user.role, token });
     } catch (error) {
         res.status(400).json({ success: false, message: error.message });
     }
@@ -77,9 +77,10 @@ export const loginUser = async (req, res) => {
     try {
         const user = await User.login(email, password);
         const name = user.name;
+        const role = user.role;
         //creating jwt token
         const token = createToken(user._id);
-        res.status(200).json({ success: true, name, email, token })
+        res.status(200).json({ success: true, name, email, role, token })
     } catch (error) {
         res.status(400).json({ success: false, message: error.message })
     }

@@ -41,13 +41,17 @@ const Login = () => {
       const data = await response.json();
       if (data.success) {
         toast.success("Login successful!");
-        login({ name: data.name, email: data.email }, data.token);
+        login({ name: data.name, email: data.email, role: data.role }, data.token);
         setLoginInfo({
           email: "",
           password: "",
         });
         setTimeout(() => {
-          navigate("/");
+          if (data.role === "hotelOwner") {
+            navigate("/owner");
+          } else {
+            navigate("/");
+          }
         }, 1000);
       } else {
         handleError(data.message || "Login failed. Please try again.");

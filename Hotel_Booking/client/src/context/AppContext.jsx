@@ -23,6 +23,7 @@ export const AppProvider = ({ children }) => {
     const login = (userData, userToken) => {
         setUser(userData);
         setToken(userToken);
+        setIsOwner(userData.role === "hotelOwner");
         localStorage.setItem('token', userToken);
         localStorage.setItem('user', JSON.stringify(userData));
     };
@@ -55,7 +56,9 @@ export const AppProvider = ({ children }) => {
     useEffect(() => {
         const storedUser = localStorage.getItem('user');
         if (storedUser && token) {
-            setUser(JSON.parse(storedUser));
+            const parsedUser = JSON.parse(storedUser);
+            setUser(parsedUser);
+            setIsOwner(parsedUser.role === "hotelOwner");
             fetchUser();
         }
     }, [token, fetchUser])
