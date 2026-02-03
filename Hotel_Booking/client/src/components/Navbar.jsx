@@ -36,7 +36,8 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { user, navigate, isOwner, setShowHotelReg, logout } = useAppContext();
- 
+  console.log("Is " + isOwner === "hotelOwner");
+
 
   useEffect(() => {
     const handleScroll = () => {
@@ -90,9 +91,9 @@ const Navbar = () => {
           <button
             className={`border px-4 py-1 text-sm font-light rounded-full cursor-pointer ${isScrolled ? "text-black" : "text-white"
               } transition-all`}
-            onClick={() => isOwner ? navigate("/owner") : setShowHotelReg(true)}
+            onClick={() => isOwner === "hotelOwner" ? navigate("/owner") : setShowHotelReg(true)}
           >
-            {isOwner ? 'DashBoard' : "List Your Hotel"}
+            {isOwner === "hotelOwner" ? "DashBoard" : 'See Your Bookings'}
           </button>
         )
         }
@@ -163,10 +164,10 @@ const Navbar = () => {
         {user && (
           <button
             className="border px-4 py-1 text-sm font-light rounded-full cursor-pointer transition-all"
-            onClick={() => isOwner ? navigate("/owner") : setShowHotelReg(true)}
+            onClick={() => isOwner === "hotelOwner" ? navigate("/owner") : setShowHotelReg(true)}
 
           >
-            {isOwner ? 'DashBoard' : "List Your Hotel"}
+            {isOwner === "hotelOwner" ? "List Your Hotel" : 'See Your Bookings'}
 
           </button>
         )}

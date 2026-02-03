@@ -23,7 +23,14 @@ export const AppProvider = ({ children }) => {
     const login = (userData, userToken) => {
         setUser(userData);
         setToken(userToken);
-        setIsOwner(userData.role === "hotelOwner");
+        if (userData.role === "hotelOwner") {
+            console.log("Owner Founed");
+
+            setIsOwner("hotelOwner")
+        } else {
+            console.log("User Founed");
+            setIsOwner("user")
+        }
         localStorage.setItem('token', userToken);
         localStorage.setItem('user', JSON.stringify(userData));
     };
@@ -41,7 +48,16 @@ export const AppProvider = ({ children }) => {
         try {
             const { data } = await axios.get('/api/user', { headers: { Authorization: `Bearer ${token}` } })
             if (data.success) {
-                setIsOwner(data.role === "hotelOwner");
+                console.log(data);
+
+                if (data.role === "hotelOwner") {
+                    console.log("Owner Founed");
+
+                    setIsOwner("hotelOwner")
+                } else {
+                    console.log("User Founed");
+                    setIsOwner("user")
+                }
                 setSearchedCities(data.recentSearchCity || [])
                 setUser(JSON.parse(localStorage.getItem('user')));
             } else {
@@ -56,10 +72,17 @@ export const AppProvider = ({ children }) => {
     useEffect(() => {
         const storedUser = localStorage.getItem('user');
         if (storedUser && token) {
+
             const parsedUser = JSON.parse(storedUser);
+            console.log(parsedUser.role);
             setUser(parsedUser);
-            setIsOwner(parsedUser.role === "hotelOwner");
+            if (parsedUser.role === "hotelOwner") {
+                setIsOwner("hotelOwner")
+            } else {
+                setIsOwner("user")
+            }
             fetchUser();
+
         }
     }, [token, fetchUser])
 
