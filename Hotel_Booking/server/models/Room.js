@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import Hotel from "./Hotel.js";
+// import Hotel from "./Hotel.js";
 
 const roomSchema = new mongoose.Schema({
     hotel: {
@@ -16,7 +16,7 @@ const roomSchema = new mongoose.Schema({
         required: true
     },
     amenities: {
-        type: Array,
+        type: [String],
         required: true
     },
     images: [{ type: String }],
